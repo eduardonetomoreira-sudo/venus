@@ -142,6 +142,93 @@ label.btn{cursor:pointer}
 /* TOAST */
 .toast{position:fixed;bottom:28px;right:28px;background:#009aaa;color:#fff;padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateY(0)}
+
+/* ===================== RESPONSIVO MOBILE ===================== */
+@media (max-width: 768px) {
+
+  /* HEADER */
+  .hdr-in{flex-wrap:wrap;height:auto;padding:10px 14px;gap:10px}
+  .logo-img{height:40px}
+  .hdr-sep{display:none}
+  .hdr-t b{font-size:14px}
+  .hdr-t small{font-size:11px}
+  .hdr-nav{margin-left:0;width:100%;justify-content:center;order:3}
+  .hnav{font-size:11.5px;padding:5px 12px}
+  .hdr-act{margin-left:0;width:100%;order:4;justify-content:center;gap:6px;flex-wrap:wrap}
+  .btn{font-size:11.5px;padding:7px 12px}
+
+  /* MAIN */
+  .main{padding:16px 12px 60px}
+
+  /* EMPRESA HEADER */
+  .emp-hdr{padding:18px 16px;gap:12px;flex-wrap:wrap}
+  .emp-av{width:44px;height:44px;font-size:13px}
+  .emp-hdr-nome{font-size:19px}
+  .emp-hdr-sub{font-size:11.5px}
+  .emp-pct{font-size:14px;padding:6px 14px}
+
+  /* EMPRESA BODY */
+  .emp-body{padding:16px 14px}
+
+  /* META GRID */
+  .meta-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .mf{padding:10px 12px}
+  .mf-lbl{font-size:10.5px}
+  .mf input,.mf select{font-size:14px}
+
+  /* CONTRATO */
+  .contrato{padding:14px 14px;gap:12px}
+  .contrato-ico{width:34px;height:34px}
+  .contrato-lbl{font-size:11px}
+  .contrato-row{gap:8px}
+  .di{font-size:13.5px;padding:5px 9px;width:100%}
+  .oi{font-size:13px;padding:5px 9px}
+
+  /* PROGRESSO */
+  .prog-lbl{font-size:11px}
+  .prog-num{font-size:15px}
+  .prog-track{height:7px}
+
+  /* LEGENDA */
+  .leg{gap:12px}
+  .li{font-size:12.5px}
+
+  /* OBSERVAÇÕES */
+  .obs-sec{padding:14px 14px}
+  .obs-sec-lbl{font-size:11px}
+  .obs-sec textarea{font-size:14px;padding:10px 11px}
+
+  /* PARCELA TABS */
+  .ptabs{gap:6px;margin-bottom:14px}
+  .ptab{font-size:12.5px;padding:7px 14px}
+
+  /* PARCELA CARD */
+  .p-card-hdr{padding:12px 14px;flex-direction:column;align-items:flex-start;gap:4px}
+  .p-card-titulo{font-size:13.5px}
+  .p-card-valor{font-size:13px}
+  .p-card-body{padding:12px 14px;gap:10px}
+
+  /* ETAPA ROW */
+  .etapa-top{padding:12px 12px;gap:9px;flex-wrap:wrap}
+  .etapa-num{width:24px;height:24px;font-size:11px;flex-shrink:0}
+  .etapa-nome{font-size:13.5px;width:100%;order:2;flex:none;padding-left:0}
+  .etapa-date{font-size:12.5px;width:100%;order:3}
+  .sb{font-size:11.5px;padding:5px 12px;order:4}
+  .chev{order:1;margin-left:auto}
+  .etapa-body{padding:0 12px 12px 12px}
+  .etapa-body textarea{font-size:13.5px}
+
+  /* TOAST */
+  .toast{bottom:16px;right:12px;left:12px;text-align:center;font-size:13px}
+}
+
+@media (max-width: 420px) {
+  .meta-grid{grid-template-columns:1fr}
+  .emp-hdr-nome{font-size:17px}
+  .hdr-act .btn span{display:none}
+  .ptab{font-size:12px;padding:6px 11px}
+}
+
 @media print{.hdr{position:static}.btn,.hdr-nav{display:none}.emp-sec{page-break-before:always}.ppanel{display:block!important}.etapa-body{display:block!important}}
 </style>
 </head>
