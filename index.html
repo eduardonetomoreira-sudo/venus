@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADECE — Acompanhamento de Subsídios Econômicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#1a4731;
+  --verde-m:#246040;
+  --verde-c:#2e7a51;
+  --verde-s:#e8f2ed;
+  --verde-b:#b8d8c8;
+  --amarelo:#f5c518;
+  --amarelo-e:#c99f00;
+  --branco:#ffffff;
+  --bg:#f2f5f3;
+  --bg2:#e6ede8;
+  --cinza:#dde4df;
+  --cinza-t:#607268;
+  --txt:#0d1f16;
+  --r:10px;
+  --rl:16px;
+}
+/* ── Cores por empresa ── */
+.c-nks {
+  --ec:#1a4731; --ec-m:#246040; --ec-c:#2e7a51;
+  --ec-s:#e8f2ed; --ec-b:#b8d8c8;
+  --ec-hdr:#1a4731; --ec-av:#f5c518; --ec-avt:#1a4731;
+  --ec-p1:#2e7a51; --ec-p2:#f5c518;
+}
+.c-mrs {
+  --ec:#1a3a5c; --ec-m:#1e4a78; --ec-c:#2563a8;
+  --ec-s:#e6eef8; --ec-b:#b3cce8;
+  --ec-hdr:#1a3a5c; --ec-av:#f5c518; --ec-avt:#1a3a5c;
+  --ec-p1:#2563a8; --ec-p2:#f5c518;
+}
+.c-mallei {
+  --ec:#5c1a2e; --ec-m:#7a2240; --ec-c:#a83060;
+  --ec-s:#f8e6ec; --ec-b:#e8b3c5;
+  --ec-hdr:#5c1a2e; --ec-av:#f5c518; --ec-avt:#5c1a2e;
+  --ec-p1:#a83060; --ec-p2:#f5c518;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--verde);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.22)}
+.hdr-in{max-width:1100px;margin:0 auto;padding:0 28px;display:flex;align-items:center;gap:14px;height:60px}
+.logo{width:38px;height:38px;border-radius:8px;background:var(--amarelo);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--verde);flex-shrink:0}
+.hdr-t{line-height:1.2}
+.hdr-t b{font-size:14.5px;font-weight:700;color:#fff;display:block}
+.hdr-t small{font-size:10px;color:rgba(255,255,255,.5)}
+.hdr-nav{display:flex;gap:4px;background:rgba(255,255,255,.1);border-radius:20px;padding:4px 5px;margin-left:8px}
+.hnav{padding:5px 13px;border-radius:16px;border:none;font-size:11px;font-weight:600;font-family:'Sora',sans-serif;cursor:pointer;color:rgba(255,255,255,.65);background:transparent;transition:all .18s}
+.hnav:hover{color:#fff;background:rgba(255,255,255,.15)}
+.hnav.on{background:var(--amarelo);color:var(--verde)}
+.hdr-act{margin-left:auto;display:flex;gap:8px}
+.btn{padding:7px 15px;border-radius:var(--r);font-size:11.5px;font-weight:600;font-family:'Sora',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+.btn-sec{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-sec:hover{background:rgba(255,255,255,.22)}
+.btn-pri{background:var(--amarelo);color:var(--verde);border:none}
+.btn-pri:hover{background:#e8b800}
+.btn:active{transform:scale(.97)}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:32px 28px 80px}
+
+/* EMPRESA SECTION */
+.emp-sec{margin-bottom:52px;scroll-margin-top:76px}
+.emp-hdr{background:var(--ec,var(--verde));border-radius:var(--rl) var(--rl) 0 0;padding:22px 28px;display:flex;align-items:center;gap:16px}
+.emp-av{width:46px;height:46px;border-radius:50%;background:var(--ec-av,var(--amarelo));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ec-avt,var(--verde));flex-shrink:0}
+.emp-hdr-info{flex:1}
+.emp-hdr-nome{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.emp-hdr-sub{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:2px}
+.emp-pct{background:var(--ec-av,var(--amarelo));color:var(--ec-avt,var(--verde));padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;font-family:'DM Mono',monospace;white-space:nowrap}
+
+.emp-body{background:var(--branco);border:1px solid var(--cinza);border-top:none;border-radius:0 0 var(--rl) var(--rl);padding:26px 28px}
+
+/* META */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-bottom:24px}
+.mf{background:var(--bg);border:1px solid var(--cinza);border-radius:var(--r);padding:10px 14px}
+.mf-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--cinza-t);margin-bottom:5px}
+.mf input,.mf select{width:100%;border:none;outline:none;font-size:13px;font-weight:500;color:var(--txt);background:transparent;font-family:'Sora',sans-serif}
+.mf input::placeholder{color:#b5c0bb;font-weight:400}
+
+/* CONTRATO */
+.contrato{background:var(--ec-s,var(--verde-s));border:1px solid var(--ec-b,var(--verde-b));border-left:4px solid var(--ec,var(--verde));border-radius:var(--r);padding:14px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.contrato-ico{width:36px;height:36px;border-radius:8px;background:var(--ec,var(--verde));display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.contrato-ico svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2}
+.contrato-body{flex:1;min-width:240px}
+.contrato-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ec,var(--verde));margin-bottom:6px}
+.contrato-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.di{border:1px solid var(--cinza);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;color:var(--txt);font-family:'Sora',sans-serif;background:var(--branco);outline:none}
+.di:focus{border-color:var(--ec-c,var(--verde-c))}
+.oi{flex:1;min-width:140px;border:1px solid var(--cinza);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--txt);font-family:'Sora',sans-serif;background:var(--branco);outline:none}
+.oi:focus{border-color:var(--ec-c,var(--verde-c))}
+.oi::placeholder{color:#b5c0bb}
+
+/* STATUS BADGE */
+.sb{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer;border:none;font-family:'Sora',sans-serif;letter-spacing:.02em;transition:opacity .15s;white-space:nowrap}
+.sb:hover{opacity:.75}
+.sp{background:#e4e2dc;color:#4a4843}
+.sa{background:#fff3cd;color:#7a5800}
+.sd{background:#d0edda;color:#155926}
+.sb2{background:#fde8e8;color:#8b1a1a}
+
+/* PROGRESSO */
+.prog{margin-bottom:22px}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--cinza-t)}
+.prog-num{font-size:13px;font-weight:700;color:var(--ec,var(--verde));font-family:'DM Mono',monospace}
+.prog-track{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ec-p1,var(--verde-c)),var(--ec-p2,var(--amarelo)));transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* LEGENDA */
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cinza-t)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* PARCELAS TABS */
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{padding:5px 14px;font-size:11.5px;font-weight:600;border:1.5px solid var(--cinza);border-radius:20px;background:var(--branco);cursor:pointer;font-family:'Sora',sans-serif;color:var(--cinza-t);transition:all .15s}
+.ptab:hover{border-color:var(--verde-c);color:var(--verde-c)}
+.ptab.on{background:var(--amarelo);color:var(--verde);border-color:var(--amarelo-e);font-weight:700}
+.ppanel{display:none}
+.ppanel.on{display:block}
+
+/* PARCELA CARD */
+.p-card{background:var(--bg);border:1px solid var(--cinza);border-radius:var(--rl);padding:0;margin-bottom:0;overflow:hidden}
+.p-card-hdr{background:var(--ec-s,var(--verde-s));border-bottom:1px solid var(--ec-b,var(--verde-b));padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.p-card-titulo{font-size:12.5px;font-weight:700;color:var(--ec,var(--verde));text-transform:uppercase;letter-spacing:.04em}
+.p-card-valor{font-size:12px;font-weight:600;color:var(--ec-m,var(--verde-m));font-family:'DM Mono',monospace}
+.p-card-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+
+/* ETAPA ROW */
+.etapa-row{
+  background:var(--branco);
+  border:1px solid var(--cinza);
+  border-radius:var(--r);
+  overflow:hidden;
+  transition:border-color .15s;
+}
+.etapa-row:hover{border-color:var(--ec-b,var(--verde-b))}
+.etapa-row.st-d{border-left:3px solid #3aaa5c}
+.etapa-row.st-a{border-left:3px solid var(--amarelo)}
+.etapa-row.st-b{border-left:3px solid #e05252}
+.etapa-row.st-p{border-left:3px solid #c8cdc9}
+.etapa-top{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+.etapa-num{width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--cinza);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:var(--cinza-t);flex-shrink:0}
+.etapa-nome{font-size:12px;font-weight:500;color:var(--txt);flex:1}
+.etapa-date{border:1px solid var(--cinza);border-radius:6px;padding:3px 8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--cinza-t);background:var(--bg);outline:none;width:128px}
+.etapa-date:focus{border-color:var(--ec-c,var(--verde-c))}
+.chev{font-size:11px;color:var(--cinza-t);transition:transform .2s;padding:0 4px;user-select:none}
+.etapa-row.open .chev{transform:rotate(180deg)}
+.etapa-body{display:none;padding:0 14px 10px 44px;border-top:1px solid var(--bg2)}
+.etapa-row.open .etapa-body{display:block}
+.etapa-body textarea{width:100%;border:1px solid var(--cinza);border-radius:6px;padding:7px 10px;font-size:11.5px;font-family:'Sora',sans-serif;color:var(--txt);background:var(--bg);resize:vertical;min-height:48px;outline:none;margin-top:8px}
+.etapa-body textarea:focus{border-color:var(--ec-c,var(--verde-c))}
+.etapa-body textarea::placeholder{color:#b5c0bb}
+
+/* OBSERVAÇÕES GERAIS */
+.obs-sec{background:var(--ec-s,var(--verde-s));border:1px solid var(--ec-b,var(--verde-b));border-left:4px solid var(--ec,var(--verde));border-radius:var(--r);padding:16px 18px;margin-bottom:24px}
+.obs-sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ec,var(--verde));margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.obs-sec-lbl svg{width:13px;height:13px;stroke:var(--ec,var(--verde));fill:none;stroke-width:2.2;flex-shrink:0}
+.obs-sec textarea{width:100%;border:1px solid var(--ec-b,var(--verde-b));border-radius:6px;padding:10px 12px;font-size:12.5px;font-family:'Sora',sans-serif;color:var(--txt);background:var(--branco);resize:vertical;min-height:80px;outline:none;line-height:1.6}
+.obs-sec textarea:focus{border-color:var(--ec,var(--verde))}
+.obs-sec textarea::placeholder{color:#b5c0bb}
+
+/* DIVIDER */
+.div-emp{border:none;border-top:2px dashed var(--cinza);margin:0 0 52px;opacity:.45}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--verde);color:#fff;padding:10px 20px;border-radius:var(--r);font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(26,71,49,.28);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media print{
+  .hdr{position:static}
+  .btn,.hdr-nav{display:none}
+  .emp-sec{page-break-before:always}
+  .ppanel{display:block!important}
+  .etapa-body{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo">AD</div>
+    <div class="hdr-t"><b>ADECE</b><small>Subsídios Econômicos</small></div>
+    <nav class="hdr-nav" id="hdr-nav"></nav>
+    <div class="hdr-act">
+      <button class="btn btn-sec" onclick="salvar()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+        Salvar
+      </button>
+      <button class="btn btn-sec" onclick="exportarJSON()" title="Salva todos os dados em arquivo .json para não perder ao atualizar o sistema">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Backup dados
+      </button>
+      <label class="btn btn-sec" style="cursor:pointer" title="Carrega um backup .json restaurando todos os dados">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3" transform="rotate(180 12 9)"/></svg>
+        Restaurar dados
+        <input type="file" accept=".json" onchange="importarJSON(event)" style="display:none">
+      </label>
+      <button class="btn btn-pri" onclick="exportar()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar relatório
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="main" id="main"></main>
+<div class="toast" id="toast">✓ Dados salvos com sucesso</div>
+
+<script>
+const EMPS=[
+  {id:'nks',   nome:'NKS',   sigla:'NKS', cls:'c-nks'},
+  {id:'mrs',   nome:'MRS',   sigla:'MRS', cls:'c-mrs'},
+  {id:'mallei',nome:'Mallei',sigla:'MAL', cls:'c-mallei'}
+];
+const SC=['p','a','d','b'];
+const SL={p:'Pendente',a:'Em andamento',d:'Concluído',b:'Bloqueado'};
+
+function ns(){return{nproc:'',valor:'',nparcelas:6,vparcela:'',obs:'',contrato:{status:'p',date:'',obs:''},etapas:{}}}
+let S={};
+EMPS.forEach(e=>S[e.id]=ns());
+
+function load(){
+  try{const r=localStorage.getItem('adece_v5');if(r){const d=JSON.parse(r);EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])})}}catch(e){}
+}
+function save(toast){
+  localStorage.setItem('adece_v5',JSON.stringify(S));
+  if(toast){const t=document.getElementById('toast');t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400)}
+}
+function salvar(){save(true)}
+function as(){save(false)}
+
+function ge(eid,etid){
+  if(!S[eid].etapas[etid])S[eid].etapas[etid]={status:'p',date:'',obs:''};
+  return S[eid].etapas[etid];
+}
+
+// Fluxo de cada parcela:
+// 1. Solicitação da prestação de contas
+// 1. Pagamento da parcela
+// 2. Solicitação da prestação de contas
+// 3. Aprovação da prestação de contas
+function etList(p){
+  return[
+    {id:`p${p}-pag`, nome:`Pagamento da parcela ${p}`},
+    {id:`p${p}-sol`, nome:`Solicitação da prestação de contas`},
+    {id:`p${p}-apv`, nome:`Aprovação da prestação de contas`},
+  ];
+}
+
+function calcProg(eid){
+  const s=S[eid];const np=s.nparcelas;
+  let tot=1,done=s.contrato.status==='d'?1:0;
+  for(let p=1;p<=np;p++)etList(p).forEach(e=>{tot++;if(ge(eid,e.id).status==='d')done++;});
+  return Math.round(done/tot*100);
+}
+
+function updProg(eid){
+  const pct=calcProg(eid);
+  const fill=document.getElementById('pf-'+eid);
+  const num=document.getElementById('pn-'+eid);
+  const badge=document.getElementById('epct-'+eid);
+  const nsub=document.getElementById('nsub-'+eid);
+  if(fill)fill.style.width=pct+'%';
+  if(num)num.textContent=pct+'%';
+  if(badge)badge.textContent=pct+'%';
+  if(nsub)nsub.textContent=pct+'%';
+}
+
+function cycleStatus(eid,etid,el){
+  const e=ge(eid,etid);
+  e.status=SC[(SC.indexOf(e.status)+1)%SC.length];
+  el.className='sb s'+e.status[0]+(e.status==='b'?'2':'');
+  el.textContent=SL[e.status];
+  const card=document.getElementById('et-'+eid+'-'+etid);
+  if(card)card.className='etapa-row st-'+e.status+(card.classList.contains('open')?' open':'');
+  updProg(eid);as();
+}
+
+function cycleContrato(eid,el){
+  const c=S[eid].contrato;
+  c.status=SC[(SC.indexOf(c.status)+1)%SC.length];
+  el.className='sb s'+c.status[0]+(c.status==='b'?'2':'');
+  el.textContent=SL[c.status];
+  updProg(eid);as();
+}
+
+function toggleEt(id){const el=document.getElementById(id);if(el)el.classList.toggle('open')}
+
+function switchP(eid,p){
+  document.querySelectorAll('#ptabs-'+eid+' .ptab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('#pps-'+eid+' .ppanel').forEach(t=>t.classList.remove('on'));
+  const tab=document.getElementById('ptab-'+eid+'-'+p);
+  const pp=document.getElementById('pp-'+eid+'-'+p);
+  if(tab)tab.classList.add('on');
+  if(pp)pp.classList.add('on');
+}
+
+function rebuildBody(eid){
+  const b=document.getElementById('ebody-'+eid);
+  if(b){b.innerHTML=buildBody(eid);updProg(eid)}
+}
+
+function fmtValor(v){
+  if(!v)return'—';
+  return v;
+}
+
+function sbClass(st){return'sb s'+st[0]+(st==='b'?'2':'')}
+
+function buildBody(eid){
+  const s=S[eid];const np=s.nparcelas;
+  let h=`
+  <div class="meta-grid">
+    <div class="mf">
+      <div class="mf-lbl">N.º do processo</div>
+      <input type="text" placeholder="Ex.: ADECE-2025-001" value="${x(s.nproc)}"
+        onchange="S['${eid}'].nproc=this.value;as()">
+    </div>
+    <div class="mf">
+      <div class="mf-lbl">Valor total contratado</div>
+      <input type="text" placeholder="R$ 0,00" value="${x(s.valor)}"
+        onchange="S['${eid}'].valor=this.value;updMeta('${eid}');as()">
+    </div>
+    <div class="mf">
+      <div class="mf-lbl">Qtd. parcelas previstas</div>
+      <select onchange="S['${eid}'].nparcelas=+this.value;rebuildBody('${eid}')">
+        ${Array.from({length:8},(_,i)=>i+1).map(n=>`<option value="${n}"${n===np?' selected':''}>${n} parcela${n>1?'s':''}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mf">
+      <div class="mf-lbl">Valor de cada parcela</div>
+      <input type="text" placeholder="R$ 0,00" value="${x(s.vparcela||'')}"
+        onchange="S['${eid}'].vparcela=this.value;as()">
+    </div>
+  </div>
+
+  <div class="contrato">
+    <div class="contrato-ico">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <div class="contrato-body">
+      <div class="contrato-lbl">Assinatura do contrato</div>
+      <div class="contrato-row">
+        <input class="di" type="date" value="${s.contrato.date}"
+          onchange="S['${eid}'].contrato.date=this.value;as()">
+        <button class="${sbClass(s.contrato.status)}" id="cbadge-${eid}"
+          onclick="cycleContrato('${eid}',this)">${SL[s.contrato.status]}</button>
+        <input class="oi" type="text" placeholder="Observação..."
+          value="${x(s.contrato.obs||'')}"
+          onchange="S['${eid}'].contrato.obs=this.value;as()">
+      </div>
+    </div>
+  </div>
+
+  <div class="prog">
+    <div class="prog-top">
+      <span class="prog-lbl">Progresso geral</span>
+      <span class="prog-num" id="pn-${eid}">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="pf-${eid}" style="width:0%"></div></div>
+  </div>
+
+  <div class="leg">
+    <div class="li"><div class="ld" style="background:#c8cdc9"></div>Pendente</div>
+    <div class="li"><div class="ld" style="background:#f5c518"></div>Em andamento</div>
+    <div class="li"><div class="ld" style="background:#3aaa5c"></div>Concluído</div>
+    <div class="li"><div class="ld" style="background:#e05252"></div>Bloqueado</div>
+  </div>
+
+  <div class="obs-sec">
+    <div class="obs-sec-lbl">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Observações gerais
+    </div>
+    <textarea placeholder="Anotações gerais sobre o processo — pendências, contatos, histórico relevante..."
+      onchange="S['${eid}'].obs=this.value;as()">${x(s.obs||'')}</textarea>
+  </div>
+
+  <div class="ptabs" id="ptabs-${eid}">`;
+
+  for(let p=1;p<=np;p++)
+    h+=`<button class="ptab${p===1?' on':''}" id="ptab-${eid}-${p}"
+      onclick="switchP('${eid}',${p})">Parcela ${p}</button>`;
+
+  h+=`</div><div id="pps-${eid}">`;
+
+  for(let p=1;p<=np;p++){
+    const vp=s.vparcela?` — ${s.vparcela}`:'';
+    h+=`<div class="ppanel${p===1?' on':''}" id="pp-${eid}-${p}">
+      <div class="p-card">
+        <div class="p-card-hdr">
+          <span class="p-card-titulo">Parcela ${p} de ${np}</span>
+          <span class="p-card-valor" id="vp-${eid}-${p}">${vp||'—'}</span>
+        </div>
+        <div class="p-card-body">`;
+    etList(p).forEach((e,i)=>{
+      const es=ge(eid,e.id);
+      const cid='et-'+eid+'-'+e.id;
+      h+=`<div class="etapa-row st-${es.status}" id="${cid}">
+        <div class="etapa-top" onclick="toggleEt('${cid}')">
+          <div class="etapa-num">${i+1}</div>
+          <span class="etapa-nome">${e.nome}</span>
+          <input class="etapa-date" type="date" value="${es.date}"
+            onclick="event.stopPropagation()"
+            onchange="ge('${eid}','${e.id}').date=this.value;as()">
+          <button class="${sbClass(es.status)}" id="badge-${eid}-${e.id}"
+            onclick="event.stopPropagation();cycleStatus('${eid}','${e.id}',this)">${SL[es.status]}</button>
+          <span class="chev">▾</span>
+        </div>
+        <div class="etapa-body">
+          <textarea placeholder="Observações, documentos, responsável pela etapa..."
+            onchange="ge('${eid}','${e.id}').obs=this.value;as()">${es.obs}</textarea>
+        </div>
+      </div>`;
+    });
+    h+=`</div></div></div>`;
+  }
+  h+=`</div>`;
+  return h;
+}
+
+function updMeta(eid){
+  // atualiza valor parcela exibido nas abas ao digitar
+  const np=S[eid].nparcelas;
+  const vp=S[eid].vparcela;
+  for(let p=1;p<=np;p++){
+    const el=document.getElementById('vp-'+eid+'-'+p);
+    if(el)el.textContent=vp||'—';
+  }
+}
+
+function x(s){return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+function exportarJSON(){
+  const d=new Date().toISOString().slice(0,10);
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`ADECE_dados_${d}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  const t=document.getElementById('toast');
+  t.textContent='✓ Backup salvo em ADECE_dados_'+d+'.json';
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Dados salvos com sucesso'},2800);
+}
+
+function importarJSON(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const imported=JSON.parse(e.target.result);
+      // Valida se tem pelo menos uma das empresas esperadas
+      const valid=EMPS.some(emp=>imported[emp.id]);
+      if(!valid){
+        alert('Arquivo inválido. Selecione um backup gerado por este sistema.');
+        return;
+      }
+      EMPS.forEach(emp=>{
+        if(imported[emp.id]) S[emp.id]=Object.assign(ns(),imported[emp.id]);
+      });
+      save(false);
+      // Reconstrói todos os painéis com os dados importados
+      EMPS.forEach(emp=>{
+        const b=document.getElementById('ebody-'+emp.id);
+        if(b){b.innerHTML=buildBody(emp.id);updProg(emp.id);}
+      });
+      const t=document.getElementById('toast');
+      t.textContent='✓ Dados restaurados com sucesso!';
+      t.classList.add('show');
+      clearTimeout(t._t);
+      t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Dados salvos com sucesso'},3000);
+    }catch(err){
+      alert('Erro ao ler o arquivo. Verifique se é um backup válido (.json).');
+    }
+  };
+  reader.readAsText(file);
+  // Limpa o input para permitir reimportar o mesmo arquivo se necessário
+  event.target.value='';
+}
+
+function exportar(){
+  const d=new Date().toLocaleDateString('pt-BR');
+  let txt=`RELATÓRIO DE ACOMPANHAMENTO — SUBSÍDIOS ECONÔMICOS\nAGÊNCIA DE DESENVOLVIMENTO DO ESTADO DO CEARÁ — ADECE\nEmitido em: ${d}\n${'═'.repeat(64)}\n\n`;
+  EMPS.forEach(emp=>{
+    const s=S[emp.id];const np=s.nparcelas;
+    txt+=`EMPRESA : ${emp.nome.toUpperCase()}\n`;
+    txt+=`Processo : ${s.nproc||'—'}\n`;
+    txt+=`Valor total : ${s.valor||'—'}\n`;
+    txt+=`Qtd. parcelas : ${np}\n`;
+    txt+=`Valor por parcela : ${s.vparcela||'—'}\n`;
+    txt+=`\nOBSERVAÇÕES GERAIS:\n${s.obs||'—'}\n\n`;
+    txt+=`CONTRATO\n`;
+    txt+=`  Data de assinatura : ${s.contrato.date||'—'}\n`;
+    txt+=`  Status             : ${SL[s.contrato.status]}\n`;
+    txt+=`  Obs                : ${s.contrato.obs||'—'}\n\n`;
+    for(let p=1;p<=np;p++){
+      txt+=`  ── PARCELA ${p} ──\n`;
+      etList(p).forEach((e,i)=>{
+        const es=ge(emp.id,e.id);
+        txt+=`    ${i+1}. ${e.nome}\n`;
+        txt+=`       Data   : ${es.date||'—'}\n`;
+        txt+=`       Status : ${SL[es.status]}\n`;
+        txt+=`       Obs    : ${es.obs||'—'}\n`;
+      });
+      txt+='\n';
+    }
+    txt+='─'.repeat(64)+'\n\n';
+  });
+  const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`ADECE_Subsidios_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();URL.revokeObjectURL(url);
+}
+
+// INIT
+load();
+const mainEl=document.getElementById('main');
+const navEl=document.getElementById('hdr-nav');
+
+EMPS.forEach((emp,idx)=>{
+  // nav
+  const nb=document.createElement('button');
+  nb.className='hnav';nb.id='hnav-'+emp.id;
+  nb.innerHTML=`${emp.nome} <span id="nsub-${emp.id}" style="opacity:.65;font-weight:400">0%</span>`;
+  nb.onclick=()=>document.getElementById('sec-'+emp.id).scrollIntoView({behavior:'smooth'});
+  navEl.appendChild(nb);
+
+  // section
+  const sec=document.createElement('section');
+  sec.className=`emp-sec ${emp.cls}`;sec.id='sec-'+emp.id;
+  sec.innerHTML=`
+    <div class="emp-hdr">
+      <div class="emp-av">${emp.sigla}</div>
+      <div class="emp-hdr-info">
+        <div class="emp-hdr-nome">${emp.nome}</div>
+        <div class="emp-hdr-sub">Subsídio econômico — ADECE · <span id="emeta-${emp.id}">—</span></div>
+      </div>
+      <div class="emp-pct" id="epct-${emp.id}">0%</div>
+    </div>
+    <div class="emp-body ${emp.cls}" id="ebody-${emp.id}"></div>
+  `;
+  mainEl.appendChild(sec);
+
+  if(idx<EMPS.length-1){const hr=document.createElement('hr');hr.className='div-emp';mainEl.appendChild(hr)}
+
+  document.getElementById('ebody-'+emp.id).innerHTML=buildBody(emp.id);
+  updProg(emp.id);
+});
+
+// intersection observer para nav ativo
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const eid=en.target.id.replace('sec-','');
+      document.querySelectorAll('.hnav').forEach(b=>b.classList.remove('on'));
+      const nb=document.getElementById('hnav-'+eid);
+      if(nb)nb.classList.add('on');
+    }
+  });
+},{threshold:.25});
+EMPS.forEach(e=>{const s=document.getElementById('sec-'+e.id);if(s)obs.observe(s)});
+
+window.addEventListener('beforeunload',()=>save(false));
+</script>
+</body>
+</html>
