@@ -264,6 +264,10 @@ label.btn{cursor:pointer}
     <div class="hdr-t"><b>Subsídios Econômicos</b><small>Acompanhamento de processos — ADECE</small></div>
     <nav class="hdr-nav" id="hdr-nav"></nav>
     <div class="hdr-act">
+      <button class="btn btn-sec" onclick="resetarDados()" title="Restaurar dados originais do backup" style="background:rgba(255,200,0,.18);border-color:rgba(255,200,0,.4)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+        Resetar
+      </button>
       <button class="btn btn-sec" onclick="salvar()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>Salvar</button>
       <button class="btn btn-sec" onclick="exportarJSON()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Backup</button>
       <label class="btn btn-sec"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,10 12,5 7,10"/><line x1="12" y1="5" x2="12" y2="19"/></svg>Restaurar<input type="file" accept=".json" onchange="importarJSON(event)" style="display:none"></label>
@@ -285,31 +289,38 @@ function ns(){return{nproc:'',valor:'',nparcelas:6,vparcela:'',obs:'',contrato:{
 const PRELOAD={"nks": {"nproc": "NUP 56012.001655/2025-87", "valor": "24.000.000,00", "nparcelas": 6, "vparcela": "4.000.000,00", "obs": "Manter contato com a empresa ate 15/06 para orientar nova presta\u00e7ao de contas.", "contrato": {"status": "d", "date": "2025-11-11", "obs": ""}, "etapas": {"p1-pag": {"status": "d", "date": "2025-12-19", "obs": ""}, "p1-sol": {"status": "d", "date": "2026-03-06", "obs": ""}, "p1-apv": {"status": "d", "date": "2026-04-10", "obs": ""}, "p2-pag": {"status": "d", "date": "2026-04-30", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}}}, "mrs": {"nproc": "NUP 56012.001879/2025-99", "valor": "4.500.000,00", "nparcelas": 4, "vparcela": "2500.000,00 mais 3x de 666.000,00", "obs": "manter contato com empresa para orientar segunda prestacao de contas. (28/05/26)", "contrato": {"status": "d", "date": "2025-12-22", "obs": ""}, "etapas": {"p1-pag": {"status": "d", "date": "2026-01-06", "obs": ""}, "p1-sol": {"status": "d", "date": "2026-04-16", "obs": ""}, "p1-apv": {"status": "d", "date": "2026-05-22", "obs": ""}, "p2-pag": {"status": "d", "date": "2026-05-26", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}}}, "mallei": {"nproc": "NUP 56012.000411/2026-68", "valor": "24.289.307,41", "nparcelas": 8, "vparcela": "7X3.000.000,00 +1 DE 3.289.307,41", "obs": "", "contrato": {"status": "p", "date": "", "obs": ""}, "etapas": {"p1-pag": {"status": "p", "date": "", "obs": ""}, "p1-sol": {"status": "p", "date": "", "obs": ""}, "p1-apv": {"status": "p", "date": "", "obs": ""}, "p2-pag": {"status": "p", "date": "", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}, "p7-pag": {"status": "p", "date": "", "obs": ""}, "p7-sol": {"status": "p", "date": "", "obs": ""}, "p7-apv": {"status": "p", "date": "", "obs": ""}, "p8-pag": {"status": "p", "date": "", "obs": ""}, "p8-sol": {"status": "p", "date": "", "obs": ""}, "p8-apv": {"status": "p", "date": "", "obs": ""}}}};
 let S={};
 EMPS.forEach(e=>S[e.id]=ns());
+function resetarDados(){
+  if(!confirm('Restaurar todos os dados do último backup embutido? As alterações não salvas serão perdidas.')) return;
+  EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
+  save(false);
+  EMPS.forEach(emp=>{
+    const b=document.getElementById('ebody-'+emp.id);
+    if(b){b.innerHTML=buildBody(emp.id);updProg(emp.id);}
+  });
+  initAllLinks();
+  const t=document.getElementById('toast');
+  t.textContent='✓ Dados restaurados do backup!';
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Dados salvos com sucesso'},3000);
+}
 function load(){
+  // Sempre começa com PRELOAD, depois tenta localStorage por cima
+  EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
   try{
-    const r=localStorage.getItem('adece_v5');
+    const r=localStorage.getItem('adece_v6');
     if(r){
       const d=JSON.parse(r);
-      // Verifica se localStorage tem dados reais (nproc preenchido em alguma empresa)
       const temDados=EMPS.some(e=>d[e.id]&&d[e.id].nproc&&d[e.id].nproc.length>0);
-      if(temDados){
-        EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])});
-      } else {
-        // localStorage vazio ou corrompido — usa PRELOAD
-        EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
-        save(false);
-      }
+      if(temDados) EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])});
+      else save(false);
     } else {
-      EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
       save(false);
     }
-  }catch(e){
-    EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
-    save(false);
-  }
+  }catch(e){ save(false); }
 }
 function save(toast){
-  localStorage.setItem('adece_v5',JSON.stringify(S));
+  localStorage.setItem('adece_v6',JSON.stringify(S));
   if(toast){const t=document.getElementById('toast');t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400)}
 }
 function salvar(){save(true)}
