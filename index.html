@@ -288,9 +288,25 @@ EMPS.forEach(e=>S[e.id]=ns());
 function load(){
   try{
     const r=localStorage.getItem('adece_v5');
-    if(r){const d=JSON.parse(r);EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])})}
-    else{EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});save(false)}
-  }catch(e){EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])})}
+    if(r){
+      const d=JSON.parse(r);
+      // Verifica se localStorage tem dados reais (nproc preenchido em alguma empresa)
+      const temDados=EMPS.some(e=>d[e.id]&&d[e.id].nproc&&d[e.id].nproc.length>0);
+      if(temDados){
+        EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])});
+      } else {
+        // localStorage vazio ou corrompido — usa PRELOAD
+        EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
+        save(false);
+      }
+    } else {
+      EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
+      save(false);
+    }
+  }catch(e){
+    EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
+    save(false);
+  }
 }
 function save(toast){
   localStorage.setItem('adece_v5',JSON.stringify(S));
