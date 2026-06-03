@@ -143,6 +143,30 @@ label.btn{cursor:pointer}
 .toast{position:fixed;bottom:28px;right:28px;background:#009aaa;color:#fff;padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateY(0)}
 
+
+/* LINKS POR ETAPA */
+.etapa-links{margin-top:10px}
+.etapa-links-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--cinza-t);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.etapa-links-lbl svg{width:13px;height:13px;stroke:var(--cinza-t);fill:none;stroke-width:2}
+.link-item{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.link-item input[type=text]{flex:1;min-width:120px;border:1px solid var(--cinza);border-radius:6px;padding:5px 10px;font-size:13px;font-family:'Sora',sans-serif;color:var(--txt);background:var(--branco);outline:none}
+.link-item input[type=text]:focus{border-color:var(--ec-c,#2e7a51)}
+.link-item input[type=text]::placeholder{color:#b5c0bb}
+.link-item a.link-open{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--ec,#1a4731);text-decoration:none;background:var(--ec-s,#e8f2ed);border:1px solid var(--ec-b,#b8d8c8);border-radius:6px;padding:5px 10px;white-space:nowrap;flex-shrink:0}
+.link-item a.link-open:hover{background:var(--ec-b,#b8d8c8)}
+.link-item a.link-open svg{width:12px;height:12px;stroke:var(--ec,#1a4731);fill:none;stroke-width:2.2}
+.link-item button.link-del{background:transparent;border:none;cursor:pointer;color:#c0c5c2;padding:4px;border-radius:4px;display:flex;align-items:center;flex-shrink:0}
+.link-item button.link-del:hover{color:#e05252}
+.link-item button.link-del svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-add-link{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ec,#1a4731);background:transparent;border:1.5px dashed var(--ec-b,#b8d8c8);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:'Sora',sans-serif;margin-top:4px;transition:all .15s}
+.btn-add-link:hover{background:var(--ec-s,#e8f2ed);border-style:solid}
+.btn-add-link svg{width:13px;height:13px;stroke:var(--ec,#1a4731);fill:none;stroke-width:2.5}
+@media (max-width:768px){
+  .link-item{gap:6px}
+  .link-item input[type=text]{font-size:13px}
+  .link-item a.link-open{font-size:11.5px;padding:5px 8px}
+}
+
 /* ===================== RESPONSIVO MOBILE ===================== */
 @media (max-width: 768px) {
 
@@ -283,7 +307,7 @@ function cycleContrato(eid,el){const c=S[eid].contrato;c.status=SC[(SC.indexOf(c
 function sbcls(st){return{p:'sp',a:'sa',d:'sd',b:'sb2'}[st]}
 function toggleEt(id){const el=document.getElementById(id);if(el)el.classList.toggle('open')}
 function switchP(eid,p){document.querySelectorAll('#ptabs-'+eid+' .ptab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('#pps-'+eid+' .ppanel').forEach(t=>t.classList.remove('on'));const tab=document.getElementById('ptab-'+eid+'-'+p);const pp=document.getElementById('pp-'+eid+'-'+p);if(tab)tab.classList.add('on');if(pp)pp.classList.add('on')}
-function rebuildBody(eid){const b=document.getElementById('ebody-'+eid);if(b){b.innerHTML=buildBody(eid);updProg(eid)}}
+function rebuildBody(eid){const b=document.getElementById('ebody-'+eid);if(b){b.innerHTML=buildBody(eid);updProg(eid);const np=S[eid].nparcelas;for(let p=1;p<=np;p++)etList(p).forEach(e=>renderLinks(eid,e.id))}}
 function x(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 function buildBody(eid){
   const s=S[eid];const np=s.nparcelas;let h='';
@@ -305,7 +329,16 @@ function buildBody(eid){
     h+=`<div class="ppanel${p===1?' on':''}" id="pp-${eid}-${p}"><div class="p-card"><div class="p-card-hdr"><span class="p-card-titulo">Parcela ${p} de ${np}</span><span class="p-card-valor">${vp}</span></div><div class="p-card-body">`;
     etList(p).forEach((e,i)=>{
       const es=ge(eid,e.id);const cid='et-'+eid+'-'+e.id;
-      h+=`<div class="etapa-row st-${es.status}" id="${cid}"><div class="etapa-top" onclick="toggleEt('${cid}')"><div class="etapa-num">${i+1}</div><span class="etapa-nome">${e.nome}</span><input class="etapa-date" type="date" value="${es.date}" onclick="event.stopPropagation()" onchange="ge('${eid}','${e.id}').date=this.value;as()"><button class="sb ${sbcls(es.status)}" id="badge-${eid}-${e.id}" onclick="event.stopPropagation();cycleStatus('${eid}','${e.id}',this)">${SL[es.status]}</button><span class="chev">\u25be</span></div><div class="etapa-body"><textarea placeholder="Documentos, observa\u00e7\u00f5es, respons\u00e1vel pela etapa..." onchange="ge('${eid}','${e.id}').obs=this.value;as()">${es.obs}</textarea></div></div>`;
+      h+=`<div class="etapa-row st-${es.status}" id="${cid}"><div class="etapa-top" onclick="toggleEt('${cid}')"><div class="etapa-num">${i+1}</div><span class="etapa-nome">${e.nome}</span><input class="etapa-date" type="date" value="${es.date}" onclick="event.stopPropagation()" onchange="ge('${eid}','${e.id}').date=this.value;as()"><button class="sb ${sbcls(es.status)}" id="badge-${eid}-${e.id}" onclick="event.stopPropagation();cycleStatus('${eid}','${e.id}',this)">${SL[es.status]}</button><span class="chev">\u25be</span></div><div class="etapa-body">
+        <textarea placeholder="Documentos, observa\u00e7\u00f5es, respons\u00e1vel pela etapa..." onchange="ge('${eid}','${e.id}').obs=this.value;as()">${es.obs}</textarea>
+        <div class="etapa-links">
+          <div class="etapa-links-lbl">
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Links e documentos
+          </div>
+          <div id="links-${eid}-${e.id}"></div>
+        </div>
+      </div></div>\`;
     });
     h+=`</div></div></div>`;
   }
@@ -314,6 +347,82 @@ function buildBody(eid){
 function exportarJSON(){const d=new Date().toISOString().slice(0,10);const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ADECE_dados_'+d+'.json';a.click();URL.revokeObjectURL(url);const t=document.getElementById('toast');t.textContent='\u2713 Backup salvo: ADECE_dados_'+d+'.json';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='\u2713 Dados salvos com sucesso'},3000)}
 function importarJSON(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const imported=JSON.parse(e.target.result);if(!EMPS.some(emp=>imported[emp.id])){alert('Arquivo inv\u00e1lido.');return}EMPS.forEach(emp=>{if(imported[emp.id])S[emp.id]=Object.assign(ns(),imported[emp.id])});save(false);EMPS.forEach(emp=>{const b=document.getElementById('ebody-'+emp.id);if(b){b.innerHTML=buildBody(emp.id);updProg(emp.id)}});const t=document.getElementById('toast');t.textContent='\u2713 Dados restaurados!';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='\u2713 Dados salvos com sucesso'},3000)}catch(err){alert('Erro ao ler arquivo.')}};reader.readAsText(file);event.target.value=''}
 function exportar(){const d=new Date().toLocaleDateString('pt-BR');let txt='RELAT\u00d3RIO DE ACOMPANHAMENTO \u2014 SUBS\u00cdDIOS ECON\u00d4MICOS\nAGENCIA DE DESENVOLVIMENTO DO ESTADO DO CEAR\u00c1 \u2014 ADECE\nEmitido em: '+d+'\n'+'\u2550'.repeat(64)+'\n\n';EMPS.forEach(emp=>{const s=S[emp.id];const np=s.nparcelas;txt+='EMPRESA : '+emp.nome.toUpperCase()+'\n';txt+='Processo         : '+(s.nproc||'\u2014')+'\n';txt+='Valor total      : '+(s.valor||'\u2014')+'\n';txt+='Qtd. parcelas    : '+np+'\n';txt+='Valor por parcela: '+(s.vparcela||'\u2014')+'\n';txt+='\nOBSERVA\u00c7\u00d5ES GERAIS:\n'+(s.obs||'\u2014')+'\n';txt+='\nCONTRATO\n  Data: '+(s.contrato.date||'\u2014')+' | Status: '+SL[s.contrato.status]+'\n\n';for(let p=1;p<=np;p++){txt+='  \u2500\u2500 PARCELA '+p+' \u2500\u2500\n';etList(p).forEach((e,i)=>{const es=ge(emp.id,e.id);txt+='    '+(i+1)+'. '+e.nome+'\n       Data: '+(es.date||'\u2014')+' | Status: '+SL[es.status]+'\n       Obs: '+(es.obs||'\u2014')+'\n'});txt+='\n'}txt+='\u2500'.repeat(64)+'\n\n'});const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ADECE_Subsidios_'+new Date().toISOString().slice(0,10)+'.txt';a.click();URL.revokeObjectURL(url)}
+
+// ── LINKS POR ETAPA ──
+function getLinks(eid, etid){
+  const e = ge(eid, etid);
+  if(!e.links) e.links = [];
+  return e.links;
+}
+
+function addLink(eid, etid){
+  getLinks(eid, etid).push({label:'', url:''});
+  renderLinks(eid, etid);
+  as();
+}
+
+function removeLink(eid, etid, idx){
+  getLinks(eid, etid).splice(idx, 1);
+  renderLinks(eid, etid);
+  as();
+}
+
+function updateLink(eid, etid, idx, field, val){
+  getLinks(eid, etid)[idx][field] = val;
+  // atualiza href do link de abrir sem re-render completo
+  if(field === 'url'){
+    const a = document.getElementById('lnk-open-'+eid+'-'+etid+'-'+idx);
+    if(a){
+      const v = val.trim();
+      a.href = v.startsWith('http') ? v : 'https://'+v;
+      a.style.display = v ? '' : 'none';
+    }
+  }
+  as();
+}
+
+function renderLinks(eid, etid){
+  const container = document.getElementById('links-'+eid+'-'+etid);
+  if(!container) return;
+  const links = getLinks(eid, etid);
+  let h = '';
+  links.forEach((lk, i) => {
+    const urlVal = lk.url || '';
+    const href = urlVal.trim() ? (urlVal.startsWith('http') ? urlVal : 'https://'+urlVal) : '#';
+    h += `<div class="link-item">
+      <input type="text" placeholder="Nome do documento (ex: Contrato assinado)" value="${x(lk.label)}"
+        onchange="updateLink('${eid}','${etid}',${i},'label',this.value)"
+        style="flex:2;min-width:140px">
+      <input type="text" placeholder="Cole o link aqui (Drive, SEI...)" value="${x(lk.url)}"
+        onchange="updateLink('${eid}','${etid}',${i},'url',this.value)"
+        style="flex:3;min-width:160px">
+      <a class="link-open" id="lnk-open-${eid}-${etid}-${i}"
+        href="${href}" target="_blank" rel="noopener"
+        style="${urlVal.trim()?'':'display:none'}">
+        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Abrir
+      </a>
+      <button class="link-del" onclick="removeLink('${eid}','${etid}',${i})" title="Remover link">
+        <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/></svg>
+      </button>
+    </div>`;
+  });
+  h += `<button class="btn-add-link" onclick="addLink('${eid}','${etid}')">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Adicionar link
+  </button>`;
+  container.innerHTML = h;
+}
+
+function initAllLinks(){
+  EMPS.forEach(emp => {
+    const np = S[emp.id].nparcelas;
+    for(let p=1;p<=np;p++){
+      etList(p).forEach(e => renderLinks(emp.id, e.id));
+    }
+  });
+}
+
 load();
 const mainEl=document.getElementById('main');
 const navEl=document.getElementById('hdr-nav');
@@ -331,6 +440,7 @@ EMPS.forEach((emp,idx)=>{
 });
 const obsv=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){const eid=en.target.id.replace('sec-','');document.querySelectorAll('.hnav').forEach(b=>b.classList.remove('on'));const nb=document.getElementById('hnav-'+eid);if(nb)nb.classList.add('on')}})},{threshold:.2});
 EMPS.forEach(e=>{const s=document.getElementById('sec-'+e.id);if(s)obsv.observe(s)});
+initAllLinks();
 window.addEventListener('beforeunload',()=>save(false));
 </script>
 </body>
