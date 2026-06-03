@@ -289,6 +289,24 @@ function ns(){return{nproc:'',valor:'',nparcelas:6,vparcela:'',obs:'',contrato:{
 const PRELOAD={"nks": {"nproc": "NUP 56012.001655/2025-87", "valor": "24.000.000,00", "nparcelas": 6, "vparcela": "4.000.000,00", "obs": "Manter contato com a empresa ate 15/06 para orientar nova presta\u00e7ao de contas.", "contrato": {"status": "d", "date": "2025-11-11", "obs": ""}, "etapas": {"p1-pag": {"status": "d", "date": "2025-12-19", "obs": ""}, "p1-sol": {"status": "d", "date": "2026-03-06", "obs": ""}, "p1-apv": {"status": "d", "date": "2026-04-10", "obs": ""}, "p2-pag": {"status": "d", "date": "2026-04-30", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}}}, "mrs": {"nproc": "NUP 56012.001879/2025-99", "valor": "4.500.000,00", "nparcelas": 4, "vparcela": "2500.000,00 mais 3x de 666.000,00", "obs": "manter contato com empresa para orientar segunda prestacao de contas. (28/05/26)", "contrato": {"status": "d", "date": "2025-12-22", "obs": ""}, "etapas": {"p1-pag": {"status": "d", "date": "2026-01-06", "obs": ""}, "p1-sol": {"status": "d", "date": "2026-04-16", "obs": ""}, "p1-apv": {"status": "d", "date": "2026-05-22", "obs": ""}, "p2-pag": {"status": "d", "date": "2026-05-26", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}}}, "mallei": {"nproc": "NUP 56012.000411/2026-68", "valor": "24.289.307,41", "nparcelas": 8, "vparcela": "7X3.000.000,00 +1 DE 3.289.307,41", "obs": "", "contrato": {"status": "p", "date": "", "obs": ""}, "etapas": {"p1-pag": {"status": "p", "date": "", "obs": ""}, "p1-sol": {"status": "p", "date": "", "obs": ""}, "p1-apv": {"status": "p", "date": "", "obs": ""}, "p2-pag": {"status": "p", "date": "", "obs": ""}, "p2-sol": {"status": "p", "date": "", "obs": ""}, "p2-apv": {"status": "p", "date": "", "obs": ""}, "p3-pag": {"status": "p", "date": "", "obs": ""}, "p3-sol": {"status": "p", "date": "", "obs": ""}, "p3-apv": {"status": "p", "date": "", "obs": ""}, "p4-pag": {"status": "p", "date": "", "obs": ""}, "p4-sol": {"status": "p", "date": "", "obs": ""}, "p4-apv": {"status": "p", "date": "", "obs": ""}, "p5-pag": {"status": "p", "date": "", "obs": ""}, "p5-sol": {"status": "p", "date": "", "obs": ""}, "p5-apv": {"status": "p", "date": "", "obs": ""}, "p6-pag": {"status": "p", "date": "", "obs": ""}, "p6-sol": {"status": "p", "date": "", "obs": ""}, "p6-apv": {"status": "p", "date": "", "obs": ""}, "p7-pag": {"status": "p", "date": "", "obs": ""}, "p7-sol": {"status": "p", "date": "", "obs": ""}, "p7-apv": {"status": "p", "date": "", "obs": ""}, "p8-pag": {"status": "p", "date": "", "obs": ""}, "p8-sol": {"status": "p", "date": "", "obs": ""}, "p8-apv": {"status": "p", "date": "", "obs": ""}}}};
 let S={};
 EMPS.forEach(e=>S[e.id]=ns());
+function load(){
+  // Sempre carrega do PRELOAD embutido
+  EMPS.forEach(e=>{
+    if(PRELOAD[e.id]) S[e.id] = Object.assign(ns(), JSON.parse(JSON.stringify(PRELOAD[e.id])));
+  });
+  // Tenta aplicar dados mais recentes do localStorage por cima
+  try{
+    const r = localStorage.getItem('adece_v6');
+    if(r){
+      const d = JSON.parse(r);
+      const temDados = EMPS.some(e => d[e.id] && d[e.id].nproc && d[e.id].nproc.length > 0);
+      if(temDados) EMPS.forEach(e=>{ if(d[e.id]) S[e.id] = Object.assign(ns(), d[e.id]); });
+    }
+  }catch(err){}
+  // Salva estado atual no localStorage
+  save(false);
+}
+
 function resetarDados(){
   if(!confirm('Restaurar todos os dados do último backup embutido? As alterações não salvas serão perdidas.')) return;
   EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
@@ -304,21 +322,7 @@ function resetarDados(){
   clearTimeout(t._t);
   t._t=setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Dados salvos com sucesso'},3000);
 }
-function load(){
-  // Sempre começa com PRELOAD, depois tenta localStorage por cima
-  EMPS.forEach(e=>{if(PRELOAD[e.id])S[e.id]=Object.assign(ns(),PRELOAD[e.id])});
-  try{
-    const r=localStorage.getItem('adece_v6');
-    if(r){
-      const d=JSON.parse(r);
-      const temDados=EMPS.some(e=>d[e.id]&&d[e.id].nproc&&d[e.id].nproc.length>0);
-      if(temDados) EMPS.forEach(e=>{if(d[e.id])S[e.id]=Object.assign(ns(),d[e.id])});
-      else save(false);
-    } else {
-      save(false);
-    }
-  }catch(e){ save(false); }
-}
+
 function save(toast){
   localStorage.setItem('adece_v6',JSON.stringify(S));
   if(toast){const t=document.getElementById('toast');t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400)}
